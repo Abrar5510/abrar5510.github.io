@@ -1,1 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift Shop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gift Shop</h1>
+    </header>
+    
+    <main>
+        <section class="products">
+            <h2>Products</h2>
+            <div class="product" data-id="1" data-name="Product 1" data-price="10.00">
+                <h3>Product 1</h3>
+                <p>Description of Product 1</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <div class="product" data-id="2" data-name="Product 2" data-price="20.00">
+                <h3>Product 2</h3>
+                <p>Description of Product 2</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            <!-- More products -->
+        </section>
+        
+        <section class="cart">
+            <h2>Cart</h2>
+            <ul class="cart-items"></ul>
+            <div class="cart-total">
+                Total: <span class="total-amount">$0.00</span>
+            </div>
+            <button class="checkout">Checkout</button>
+        </section>
+    </main>
 
+    <footer>
+        <p>&copy; 2024 Gift Shop</p>
+    </footer>
+
+    <script>
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const cartItemsContainer = document.querySelector('.cart-items');
+        const totalAmount = document.querySelector('.total-amount');
+        let cartItems = [];
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const product = button.parentElement;
+                const id = product.getAttribute('data-id');
+                const name = product.getAttribute('data-name');
+                const price = parseFloat(product.getAttribute('data-price'));
+
+                addToCart({ id, name, price });
+            });
+        });
+
+        function addToCart(item) {
+            const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                item.quantity = 1;
+                cartItems.push(item);
+            }
+
+            updateCart();
+        }
+
+        function updateCart() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cartItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} x ${item.quantity}`;
+                cartItemsContainer.appendChild(li);
+                total += item.price * item.quantity;
+            });
+
+            totalAmount.textContent = `$${total.toFixed(2)}`;
+        }
+
+        document.querySelector('.checkout').addEventListener('click', () => {
+            alert('Checkout functionality not implemented in this example.');
+        });
+    </script>
+</body>
+</html>
